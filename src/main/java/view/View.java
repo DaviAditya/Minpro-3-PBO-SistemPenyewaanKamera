@@ -200,7 +200,7 @@ public class View {
     }
 
     // User gabole isi kosong 
-      private String inputTeks(String pesan) {
+        private String inputTeks(String pesan) {
         while (true) {
             System.out.print(pesan);
             String teks = scanner.nextLine().trim();

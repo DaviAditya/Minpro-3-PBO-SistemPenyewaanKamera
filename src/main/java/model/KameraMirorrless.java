@@ -10,7 +10,8 @@ package model;
  */
 public class KameraMirorrless extends Kamera {
     private boolean adaFitur4K;
-        public KameraMirorrless(int idKamera, String namaKamera, double hargaSewa, boolean adaFitur4K){
+    
+    public KameraMirorrless(int idKamera, String namaKamera, double hargaSewa, boolean adaFitur4K){
         super(idKamera, namaKamera, hargaSewa);
         this.adaFitur4K = adaFitur4K;
         }
@@ -22,7 +23,12 @@ public class KameraMirorrless extends Kamera {
         this.adaFitur4K = adaFitur4K;
     }
     @Override
-    public String toString() {
-        return super.toString() + " | Fitur 4k: " + adaFitur4K;
+    public String getJenisKamera() {
+        return "Mirrorless";
+    }
+
+    @Override
+    public String getSpesifikasi() {
+        return "Fitur 4K: " + (adaFitur4K ? "Ya" : "Tidak");
     }
 }

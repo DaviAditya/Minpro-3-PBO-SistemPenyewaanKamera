@@ -8,23 +8,29 @@ package model;
  *
  * @author Dovs
  */
-public class KameraDslr extends Kamera {
+public final class KameraDslr extends Kamera {
     private String tipeLensa;
+
     public KameraDslr(int idKamera, String namaKamera, double hargaSewa, String tipeLensa) {
         super(idKamera, namaKamera, hargaSewa);
         this.tipeLensa = tipeLensa;
-     }
-    
+    }
+
     public String getTipeLensa() {
         return tipeLensa;
     }
-    
+
     public void setTipeLensa(String tipeLensa) {
         this.tipeLensa = tipeLensa;
     }
-    
+
     @Override
-    public String toString() {
-        return super.toString() + " | Tipe Lensa: " + tipeLensa;
+    public String getJenisKamera() {
+        return "DSLR";
+    }
+
+    @Override
+    public String getSpesifikasi() {
+        return "Tipe Lensa: " + tipeLensa;
     }
 }

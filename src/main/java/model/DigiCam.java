@@ -8,8 +8,9 @@ package model;
  *
  * @author Dovs
  */
-public class DigiCam extends Kamera{
+public final class DigiCam extends Kamera {
     private String efekRetro;
+
     public DigiCam(int idKamera, String namaKamera, double hargaSewa, String efekRetro) {
         super(idKamera, namaKamera, hargaSewa);
         this.efekRetro = efekRetro;
@@ -22,9 +23,14 @@ public class DigiCam extends Kamera{
     public void setEfekRetro(String efekRetro) {
         this.efekRetro = efekRetro;
     }
-    
+
     @Override
-    public String toString() {
-        return super.toString() + " | efekRetro: " + efekRetro;
+    public String getJenisKamera() {
+        return "Digicam";
+    }
+
+    @Override
+    public String getSpesifikasi() {
+        return "Efek Retro: " + efekRetro;
     }
 }

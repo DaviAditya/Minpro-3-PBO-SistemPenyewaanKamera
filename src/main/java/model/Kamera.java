@@ -8,24 +8,22 @@ package model;
  *
  * @author Dovs
  */
-public class Kamera {
-    private int idKamera;
-    private String namaKamera;
-    private double hargaSewa;
+public abstract class Kamera implements Disewakan {
+    public static final int PENGALI_HARIAN = 3;
 
-//  Contructor
+    private final int idKamera;
+    private String namaKamera;
+    private double hargaSewa; 
+
     public Kamera(int idKamera, String namaKamera, double hargaSewa) {
         this.idKamera = idKamera;
         this.namaKamera = namaKamera;
-        this.hargaSewa = hargaSewa;
+        setHargaSewa(hargaSewa);
     }
+
     // Getter dan Setter
     public int getIdKamera() {
-        return idKamera; 
-    }
-    
-    public void setIdKamera(int idKamera) {
-        this.idKamera = idKamera;
+        return idKamera;
     }
 
     public String getNamaKamera() {
@@ -39,26 +37,39 @@ public class Kamera {
     public double getHargaSewa() {
         return hargaSewa;
     }
+
     public void setHargaSewa(double hargaSewa) {
         if (hargaSewa < 0) {
-            throw new IllegalArgumentException ("Harga sewa tidak boleh negatif!");
-    }
-   this.hargaSewa = hargaSewa;
-}
-    public double hitungBiayaSewa(int durasi3Jam) {
-        return this.hargaSewa * durasi3Jam;
+            throw new IllegalArgumentException("Harga sewa tidak boleh negatif!");
+        }
+        this.hargaSewa = hargaSewa;
     }
 
+    public abstract String getJenisKamera();
+    public abstract String getSpesifikasi();
+
+    public double hitungBiayaSewa(int durasi3Jam) {
+        return hitungBiayaSewa(durasi3Jam, TipeSewa.PER_3_JAM);
+    }
+
+    @Override
+    public double hitungBiayaSewa(int durasi, TipeSewa tipe) {
+        if (tipe == TipeSewa.HARIAN) {
+            return hargaSewa * PENGALI_HARIAN * durasi;
+        }
+        return hargaSewa * durasi;
+    }
+
+    @Override
     public String getInfo() {
-    return "ID: " + idKamera + " | Nama: " + namaKamera;
-}
-    
+        return "ID: " + idKamera + " | Nama: " + namaKamera;
+    }
+
     @Override
     public String toString() {
-        return "Kamera{" +
-                "idKamera=" + idKamera +
-                ", namaKamera='" + namaKamera + '\'' +
-                ", hargaSewa=" + hargaSewa +
-                '}';
+        return "[" + getJenisKamera() + "] ID: " + idKamera
+                + " | " + namaKamera
+                + " | Rp" + hargaSewa + " / 3 jam"
+                + " | " + getSpesifikasi();
     }
 }

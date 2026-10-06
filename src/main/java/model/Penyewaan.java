@@ -9,25 +9,35 @@ package model;
  * @author Dovs
  */
 public class Penyewaan {
-    private String kodeSewa;
-    
+    private final String kodeSewa;
+
     // Attribute Customer
     private String idCust;
     private String namaCust;
     private String noTelp;
-    
+
     // Attribute Penyewaan
     private Kamera kamera;
-    private int durasi3Jam;
+    private TipeSewa tipeSewa;
+    private int durasi;
 
-    // Constructor
-    public Penyewaan(String kodeSewa, String idCust, String namaCust, String noTelp, Kamera kamera, int durasi3Jam) {
-        this.kodeSewa = kodeSewa;
-        this.idCust = idCust;
-        this.namaCust = namaCust;
+    public Penyewaan(String kodeSewa, String idCust, String namaCust, String noTelp,
+                     Kamera kamera, TipeSewa tipeSewa, int durasi) {
+        this.kodeSewa = validasiTeks(kodeSewa, "Kode sewa");
+        setIdCust(idCust);
+        setNamaCust(namaCust);
         setNoTelp(noTelp);
-        this.kamera = kamera;
-        setDurasi3Jam(durasi3Jam);
+        setKamera(kamera);
+        setTipeSewa(tipeSewa);
+        setDurasi(durasi);
+    }
+
+    // Validasi jangan null
+    private static String validasiTeks(String nilai, String namaField) {
+        if (nilai == null || nilai.trim().isEmpty()) {
+            throw new IllegalArgumentException(namaField + " tidak boleh kosong!");
+        }
+        return nilai.trim();
     }
 
     // Getter dan Setter
@@ -35,16 +45,12 @@ public class Penyewaan {
         return kodeSewa;
     }
 
-    public void setKodeSewa(String kodeSewa) {
-        this.kodeSewa = kodeSewa;
-    }
-
     public String getIdCust() {
         return idCust;
     }
 
     public void setIdCust(String idCust) {
-        this.idCust = idCust;
+        this.idCust = validasiTeks(idCust, "ID customer");
     }
 
     public String getNamaCust() {
@@ -52,7 +58,7 @@ public class Penyewaan {
     }
 
     public void setNamaCust(String namaCust) {
-        this.namaCust = namaCust;
+        this.namaCust = validasiTeks(namaCust, "Nama customer");
     }
 
     public String getNoTelp() {
@@ -60,10 +66,10 @@ public class Penyewaan {
     }
 
     public void setNoTelp(String noTelp) {
-        if (noTelp == null || !noTelp.matches("\\d+")) {
+        if (noTelp == null || !noTelp.trim().matches("\\d+")) {
             throw new IllegalArgumentException("Nomor telepon harus berupa angka!");
         }
-        this.noTelp = noTelp;
+        this.noTelp = noTelp.trim();
     }
 
     public Kamera getKamera() {
@@ -71,25 +77,42 @@ public class Penyewaan {
     }
 
     public void setKamera(Kamera kamera) {
+        if (kamera == null) {
+            throw new IllegalArgumentException("Kamera tidak boleh kosong!");
+        }
         this.kamera = kamera;
     }
 
-    public int getDurasi3Jam() {
-        return durasi3Jam;
+    public TipeSewa getTipeSewa() {
+        return tipeSewa;
     }
 
-    public void setDurasi3Jam(int durasi3Jam) {
-        if (durasi3Jam <= 0) {
-            throw new IllegalArgumentException("Durasi sewa minimal 1 paket (3 jam)!");
+    public void setTipeSewa(TipeSewa tipeSewa) {
+        if (tipeSewa == null) {
+            throw new IllegalArgumentException("Tipe sewa tidak boleh kosong!");
         }
-        this.durasi3Jam = durasi3Jam;
+        this.tipeSewa = tipeSewa;
     }
 
-    // Method hitung total biaya menggunakan Polymorphism dari objek Kamera
+    public int getDurasi() {
+        return durasi;
+    }
+
+    public void setDurasi(int durasi) {
+        if (durasi <= 0) {
+            throw new IllegalArgumentException("Durasi sewa minimal 1!");
+        }
+        this.durasi = durasi;
+    }
+
+    public String getDeskripsiDurasi() {
+        if (tipeSewa == TipeSewa.HARIAN) {
+            return durasi + " hari";
+        }
+        return durasi + " paket (" + (durasi * 3) + " jam)";
+    }
+
     public double hitungTotalBiaya() {
-        if (kamera != null) {
-            return kamera.hitungBiayaSewa(durasi3Jam);
-        }
-        return 0;
+        return kamera.hitungBiayaSewa(durasi, tipeSewa);
     }
 }
